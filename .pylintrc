@@ -1,0 +1,15 @@
+[MASTER]
+disable=
+     C0103, # Method name "do_POST" doesn't conform to snake_case naming style (invalid-name)
+     R0801, # Similar lines in 2 files
+     R0903, # Too few public methods (0/2) (too-few-public-methods)
+     R0913, # Too many arguments (7/5) (too-many-arguments)
+     R0914, # Too many local variables (16/15) (too-many-locals)
+     R0916, # Too many boolean expressions in if statement (6/5) (too-many-boolean-expressions)
+     W0613, # Unused argument 'store' (unused-argument)
+     W0718, # Catching too general exception Exception (broad-exception-caught)
+
+[BASIC]
+
+[FORMAT]
+max-line-length=130
