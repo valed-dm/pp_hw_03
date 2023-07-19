@@ -40,9 +40,6 @@ class CharField(Field):
 class ArgumentsField(Field):
     """Evaluates ArgumentsField"""
 
-    def __init__(self, field, field_name, required, nullable):
-        super().__init__(field, field_name, required, nullable)
-
     @property
     def field(self):
         return self._field
@@ -58,9 +55,6 @@ class ArgumentsField(Field):
 class EmailField(Field):
     """Evaluates EmailField"""
 
-    def __init__(self, field, field_name, required, nullable):
-        super().__init__(field, field_name, required, nullable)
-
     @property
     def field(self):
         return self._field
@@ -75,9 +69,6 @@ class EmailField(Field):
 
 class PhoneField(Field):
     """Evaluates PhoneField"""
-
-    def __init__(self, field, field_name, required, nullable):
-        super().__init__(field, field_name, required, nullable)
 
     @property
     def field(self):
@@ -101,9 +92,6 @@ class PhoneField(Field):
 class DateField(Field):
     """Evaluates DateField"""
 
-    def __init__(self, field, field_name, required, nullable):
-        super().__init__(field, field_name, required, nullable)
-
     @property
     def field(self):
         return self._field
@@ -121,9 +109,6 @@ class DateField(Field):
 
 class BirthDayField(Field):
     """Evaluates BirthdayField"""
-
-    def __init__(self, field, field_name, required, nullable):
-        super().__init__(field, field_name, required, nullable)
 
     @property
     def field(self):
@@ -148,9 +133,6 @@ class BirthDayField(Field):
 class GenderField(Field):
     """Evaluates GenderField"""
 
-    def __init__(self, field, field_name, required, nullable):
-        super().__init__(field, field_name, required, nullable)
-
     @property
     def field(self):
         return self._field
@@ -165,9 +147,6 @@ class GenderField(Field):
 
 class ClientIDsField(Field):
     """Evaluates ClientsIDsField"""
-
-    def __init__(self, field, field_name, required, nullable):
-        super().__init__(field, field_name, required, nullable)
 
     @property
     def field(self):
