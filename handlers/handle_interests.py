@@ -1,38 +1,27 @@
 """Clients interests request handler"""
 
-from helpers.codes import INVALID_REQUEST, OK
+from check.check_request_data import check_request_data
+from helpers.codes import INVALID_REQUEST
 from helpers.get_interests import get_interests
-from helpers.get_non_empty import non_empty_req_fields
 from models.request_interests import ClientsInterestsRequest
 
 
 def clients_interests_handler(request, ctx):
     """Handles clients interests request"""
 
-    code = OK
-    response = {}
-
     arguments = request["body"]["arguments"]
     client_ids = arguments.get("client_ids", None)
     date = arguments.get("date", None)
 
-    # request data validates here:
-    try:
-        data = ClientsInterestsRequest(client_ids=client_ids, date=date)
-        non_empty_req_fields(data, ctx)
+    response, code, _ = check_request_data(
+        obj=ClientsInterestsRequest, ctx=ctx, client_ids=client_ids, date=date
+    )
 
-    except (KeyError, ValueError) as e:
-        response = {
-            "code": INVALID_REQUEST,
-            "error": getattr(e, 'message', repr(e))
-        }
-        code = INVALID_REQUEST
-        return response, code
+    if code != INVALID_REQUEST:
+        ctx["nclients"] = len(client_ids)
 
-    ctx["nclients"] = len(client_ids)
-
-    for cid in client_ids:
-        interests = get_interests(store=None, cid=cid)
-        response[f"{cid}"] = interests
+        for cid in client_ids:
+            interests = get_interests(store=None, cid=cid)
+            response[f"{cid}"] = interests
 
     return response, code

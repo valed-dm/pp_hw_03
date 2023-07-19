@@ -1,7 +1,6 @@
 [MASTER]
 disable=
      C0103, # Method name "do_POST" doesn't conform to snake_case naming style (invalid-name)
-     R0801, # Similar lines in 2 files
      R0903, # Too few public methods (0/2) (too-few-public-methods)
      R0913, # Too many arguments (7/5) (too-many-arguments)
      R0914, # Too many local variables (16/15) (too-many-locals)

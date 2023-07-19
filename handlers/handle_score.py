@@ -1,7 +1,6 @@
 """Score request handler"""
-
+from check.check_request_data import check_request_data
 from helpers.codes import INVALID_REQUEST, OK
-from helpers.get_non_empty import non_empty_req_fields
 from helpers.get_score import get_score
 from models.request_score import OnlineScoreRequest
 
@@ -26,35 +25,28 @@ def online_score_handler(request, ctx):
             gender = arguments.get("gender", None)
 
         if (first and last) or (email and phone) or (birthday and gender is not None):
-            try:
-                data = OnlineScoreRequest(
-                    first_name=first,
-                    last_name=last,
-                    email=email,
-                    phone=phone,
-                    birthday=birthday,
-                    gender=gender
-                )
-                non_empty_req_fields(data, ctx)
-
-            except (KeyError, ValueError) as e:
-                response = {
-                    "code": INVALID_REQUEST,
-                    "error": getattr(e, 'message', repr(e))
-                }
-                code = INVALID_REQUEST
-                return response, code
-
-            score = get_score(
-                store=None,
-                phone=data.phone.field,
-                email=data.email.field,
-                birthday=data.birthday.field,
-                gender=data.gender.field,
-                first_name=data.first_name.field,
-                last_name=data.last_name.field
+            response, code, data = check_request_data(
+                obj=OnlineScoreRequest,
+                ctx=ctx,
+                first_name=first,
+                last_name=last,
+                email=email,
+                phone=phone,
+                birthday=birthday,
+                gender=gender
             )
-            response = {"score": score}
+
+            if code != INVALID_REQUEST:
+                score = get_score(
+                    store=None,
+                    phone=data.phone.field,
+                    email=data.email.field,
+                    birthday=data.birthday.field,
+                    gender=data.gender.field,
+                    first_name=data.first_name.field,
+                    last_name=data.last_name.field
+                )
+                response = {"score": score}
 
         else:
             code = INVALID_REQUEST
