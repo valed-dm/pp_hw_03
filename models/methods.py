@@ -1,6 +1,5 @@
 """Classes for request's fields data evaluation"""
 
-
 import datetime
 
 from helpers.codes import ADMIN_LOGIN
@@ -10,18 +9,19 @@ class Field:
     """Evaluates all fields for required, nullable"""
 
     def __init__(self, field, field_name, required, nullable):
+        self.field = self._is_valid(field, field_name, required, nullable)
+        self.field_name = field_name
 
+    @staticmethod
+    def _is_valid(field, field_name, required, nullable):
         if required and field is None:
             raise KeyError(f"request {repr(field_name)} field is required but not found")
-
         if not field:
             if nullable:
                 pass
             else:
                 raise ValueError(f"{field_name} must contain value")
-
-        self.field = field
-        self.field_name = field_name
+        return field
 
 
 class CharField(Field):
@@ -29,7 +29,10 @@ class CharField(Field):
 
     def __init__(self, field, field_name, required, nullable):
         super().__init__(field, field_name, required, nullable)
+        self._is_valid_charfield(field, field_name)
 
+    @staticmethod
+    def _is_valid_charfield(field, field_name):
         if not isinstance(field, str) and field is not None:
             raise ValueError(f"{field_name} must be of 'str' type, not {field}")
 
@@ -40,9 +43,16 @@ class ArgumentsField(Field):
     def __init__(self, field, field_name, required, nullable):
         super().__init__(field, field_name, required, nullable)
 
+    @property
+    def field(self):
+        return self._field
+
+    @field.setter
+    def field(self, field):
         if field:
             if not isinstance(field, dict):
                 raise ValueError("arguments must be of dict type")
+        self._field = field
 
 
 class EmailField(Field):
@@ -51,9 +61,16 @@ class EmailField(Field):
     def __init__(self, field, field_name, required, nullable):
         super().__init__(field, field_name, required, nullable)
 
+    @property
+    def field(self):
+        return self._field
+
+    @field.setter
+    def field(self, field):
         if field:
             if not isinstance(field, str) or '@' not in field and field:
-                raise ValueError(f"{field_name} string must contain '@', {field} is not valid")
+                raise ValueError(f"email must contain '@', {field} is not valid")
+        self._field = field
 
 
 class PhoneField(Field):
@@ -62,6 +79,12 @@ class PhoneField(Field):
     def __init__(self, field, field_name, required, nullable):
         super().__init__(field, field_name, required, nullable)
 
+    @property
+    def field(self):
+        return self._field
+
+    @field.setter
+    def field(self, field):
         if field:
             phone = str(field)
             if len(phone) not in [0, 11]:
@@ -72,6 +95,7 @@ class PhoneField(Field):
                 raise ValueError(
                     f"phone should contain 11 digits with leading '7' or left empty, not {phone}"
                 )
+        self._field = field
 
 
 class DateField(Field):
@@ -79,12 +103,20 @@ class DateField(Field):
 
     def __init__(self, field, field_name, required, nullable):
         super().__init__(field, field_name, required, nullable)
+
+    @property
+    def field(self):
+        return self._field
+
+    @field.setter
+    def field(self, field):
         date_format = "%d.%m.%Y"
         if field:
             try:
                 datetime.datetime.strptime(field, date_format)
             except ValueError as e:
                 raise ValueError(f"date format 'DD.MM.YYYY' or empty: {field} is not valid") from e
+        self._field = field
 
 
 class BirthDayField(Field):
@@ -92,6 +124,13 @@ class BirthDayField(Field):
 
     def __init__(self, field, field_name, required, nullable):
         super().__init__(field, field_name, required, nullable)
+
+    @property
+    def field(self):
+        return self._field
+
+    @field.setter
+    def field(self, field):
         date_format = "%d.%m.%Y"
         if field:
             try:
@@ -103,6 +142,7 @@ class BirthDayField(Field):
             t_delta_years = now_time.year - b_date_time.year
             if t_delta_years >= 70:
                 raise ValueError(f"person age should not exceed 70, but given {t_delta_years}")
+        self._field = field
 
 
 class GenderField(Field):
@@ -110,9 +150,17 @@ class GenderField(Field):
 
     def __init__(self, field, field_name, required, nullable):
         super().__init__(field, field_name, required, nullable)
+
+    @property
+    def field(self):
+        return self._field
+
+    @field.setter
+    def field(self, field):
         if field is not None:
             if not isinstance(field, int) and field not in [0, 1, 2] or field < 0:
                 raise ValueError(f"gender value should be integer of 0, 1, 2 or left empty, not {repr(field)}")
+        self._field = field
 
 
 class ClientIDsField(Field):
@@ -120,10 +168,18 @@ class ClientIDsField(Field):
 
     def __init__(self, field, field_name, required, nullable):
         super().__init__(field, field_name, required, nullable)
+
+    @property
+    def field(self):
+        return self._field
+
+    @field.setter
+    def field(self, field):
         if not isinstance(field, list) or len(field) == 0:
             raise ValueError(f"client_ids should be of non-empty list type, not {repr(field)}")
         if not all(isinstance(item, int) for item in field):
             raise ValueError(f"all client_ids values are to be integers, not {repr(field)}")
+        self._field = field
 
 
 class ClientsInterestsRequest:
