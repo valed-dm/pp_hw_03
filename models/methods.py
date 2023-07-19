@@ -42,6 +42,7 @@ class ArgumentsField(Field):
 
     @property
     def field(self):
+        """Property object setter is used for field validation"""
         return self._field
 
     @field.setter
@@ -57,6 +58,7 @@ class EmailField(Field):
 
     @property
     def field(self):
+        """Property object setter is used for field validation"""
         return self._field
 
     @field.setter
@@ -72,6 +74,7 @@ class PhoneField(Field):
 
     @property
     def field(self):
+        """Property object setter is used for field validation"""
         return self._field
 
     @field.setter
@@ -94,6 +97,7 @@ class DateField(Field):
 
     @property
     def field(self):
+        """Property object setter is used for field validation"""
         return self._field
 
     @field.setter
@@ -112,6 +116,7 @@ class BirthDayField(Field):
 
     @property
     def field(self):
+        """Property object setter is used for field validation"""
         return self._field
 
     @field.setter
@@ -135,6 +140,7 @@ class GenderField(Field):
 
     @property
     def field(self):
+        """Property object setter is used for field validation"""
         return self._field
 
     @field.setter
@@ -150,6 +156,7 @@ class ClientIDsField(Field):
 
     @property
     def field(self):
+        """Property object setter is used for field validation"""
         return self._field
 
     @field.setter
