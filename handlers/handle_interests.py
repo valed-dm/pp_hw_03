@@ -3,7 +3,7 @@
 from helpers.codes import INVALID_REQUEST, OK
 from helpers.get_interests import get_interests
 from helpers.get_non_empty import non_empty_req_fields
-from models.methods import ClientsInterestsRequest
+from models.request_interests import ClientsInterestsRequest
 
 
 def clients_interests_handler(request, ctx):

@@ -1,7 +1,7 @@
 """Checks request data"""
 
 from helpers.codes import INVALID_REQUEST, OK
-from models.methods import MethodRequest
+from models.request_method import MethodRequest
 
 
 def check_request(request, ctx):

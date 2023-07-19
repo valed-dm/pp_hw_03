@@ -3,7 +3,7 @@
 from helpers.codes import INVALID_REQUEST, OK
 from helpers.get_non_empty import non_empty_req_fields
 from helpers.get_score import get_score
-from models.methods import OnlineScoreRequest
+from models.request_score import OnlineScoreRequest
 
 
 def online_score_handler(request, ctx):

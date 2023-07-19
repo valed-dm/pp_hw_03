@@ -1,8 +1,6 @@
-"""Classes for request's fields data evaluation"""
+"""Classes for request fields data evaluation"""
 
 import datetime
-
-from helpers.codes import ADMIN_LOGIN
 
 
 class Field:
@@ -166,39 +164,3 @@ class ClientIDsField(Field):
         if not all(isinstance(item, int) for item in field):
             raise ValueError(f"all client_ids values are to be integers, not {repr(field)}")
         self._field = field
-
-
-class ClientsInterestsRequest:
-    """Evaluates ClientsInterestsRequest"""
-
-    def __init__(self, client_ids, date):
-        self.client_ids = ClientIDsField(required=True, nullable=False, field=client_ids, field_name="client_ids")
-        self.date = DateField(required=False, nullable=True, field=date, field_name="date")
-
-
-class OnlineScoreRequest:
-    """Evaluates OnlineScoreRequest"""
-
-    def __init__(self, first_name, last_name, email, phone, birthday, gender):
-        self.first_name = CharField(required=False, nullable=True, field=first_name, field_name="first_name")
-        self.last_name = CharField(required=False, nullable=True, field=last_name, field_name="last_name")
-        self.email = EmailField(required=False, nullable=True, field=email, field_name="email")
-        self.phone = PhoneField(required=False, nullable=True, field=phone, field_name="phone")
-        self.birthday = BirthDayField(required=False, nullable=True, field=birthday, field_name="birthday")
-        self.gender = GenderField(required=False, nullable=True, field=gender, field_name="gender")
-
-
-class MethodRequest:
-    """Evaluates MethodRequest"""
-
-    def __init__(self, account, login, token, method, arguments):
-        self.account = CharField(required=False, nullable=True, field=account, field_name="account")
-        self.login = CharField(required=True, nullable=True, field=login, field_name="login")
-        self.token = CharField(required=True, nullable=True, field=token, field_name="token")
-        self.method = CharField(required=True, nullable=True, field=method, field_name="method")
-        self.arguments = ArgumentsField(required=True, nullable=False, field=arguments, field_name="arguments")
-
-    @property
-    def is_admin(self):
-        """Checks if request login is 'admin'"""
-        return self.login.field == ADMIN_LOGIN
