@@ -18,7 +18,8 @@ class MainHTTPHandler(BaseHTTPRequestHandler):
 
     store = None
 
-    def get_request_id(self, headers):
+    @staticmethod
+    def get_request_id(headers):
         """Provides request id"""
 
         return headers.get('HTTP_X_REQUEST_ID', uuid.uuid4().hex)
