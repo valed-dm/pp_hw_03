@@ -2,7 +2,7 @@ name: Pytest
 
 on:
   push:
-    branches: [ "main", "sc_api" ]
+    branches: [ "main", "sc_tests" ]
   pull_request:
     branches: [ "main" ]
 
