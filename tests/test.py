@@ -42,7 +42,8 @@ class TestSuite(unittest.TestCase):
             context=self.context
         )
 
-    def set_valid_auth(self, request):
+    @staticmethod
+    def set_valid_auth(request):
         """Authenticates request to pass authentication when testing"""
 
         if request.get("login") == ADMIN_LOGIN:
