@@ -23,7 +23,7 @@ def check_request(request, ctx):
             login=login,
             token=token,
             arguments=arguments,
-            method=method
+            method=method,
         )
 
         ctx["is_admin"] = method_req.is_admin
@@ -32,9 +32,6 @@ def check_request(request, ctx):
 
     except (KeyError, ValueError) as e:
         code = INVALID_REQUEST
-        response = {
-            "code": code,
-            "error": getattr(e, 'message', repr(e))
-        }
+        response = {"code": code, "error": getattr(e, "message", repr(e))}
 
         return response, code
