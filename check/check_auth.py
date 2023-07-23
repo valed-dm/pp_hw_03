@@ -11,16 +11,16 @@ def check_auth(request):
 
     if request.get("login", "") == ADMIN_LOGIN:
         digest = hashlib.sha512(
-            (datetime.datetime.now().strftime("%Y%m%d%H") + ADMIN_SALT)
-            .encode("utf-8")
+            (datetime.datetime.now().strftime("%Y%m%d%H") + ADMIN_SALT).encode("utf-8")
         ).hexdigest()
         # for use when testing
         # request["token"] = digest
         # print(digest)
     else:
         digest = hashlib.sha512(
-            (request.get("account", "") + request.get("login", "") + SALT)
-            .encode("utf-8")
+            (request.get("account", "") + request.get("login", "") + SALT).encode(
+                "utf-8"
+            )
         ).hexdigest()
         # for use when testing
         # request["token"] = digest
