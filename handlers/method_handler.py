@@ -25,8 +25,7 @@ def method_handler(request, headers, context):
             if request.get("method", None) in router and not response:
                 try:
                     response, code = router[request["method"]](
-                        {"body": request, "headers": headers},
-                        context
+                        {"body": request, "headers": headers}, context
                     )
                 except Exception as e:
                     logging.exception("Unexpected error: %s", e)
