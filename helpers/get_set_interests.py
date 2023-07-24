@@ -11,6 +11,7 @@ def get_interests(cid):
 
     res = store_get(f"i:{cid}")
     # return else [""] imitates client exists and db OK
+    # Stupnikov's else [] -> else[""] to modify test_ok_interests_request behaviour
     return json.loads(res) if res else [""]
 
 
