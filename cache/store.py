@@ -59,5 +59,12 @@ def store_get(key):
     value = r_connect(r.get, key)
     if value:
         return value
-
-    return None
+    else:
+        try:
+            # check redis connection
+            r.ping()
+            return None
+        # returns info message if db is unavailable at a moment
+        except redis.ConnectionError:
+            logging.error("db connection lost")
+            return ["Unable to get client_interests: db connection lost"]
