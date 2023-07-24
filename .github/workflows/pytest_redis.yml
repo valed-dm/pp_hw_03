@@ -1,0 +1,38 @@
+name: Pytest-Redis
+
+on:
+  push:
+    branches: [ "main", "sc_tests" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  runner-job:
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          python --version
+          python -m pip install --upgrade pip
+          python -m pip install poetry
+          python -m poetry config virtualenvs.create false
+          python -m poetry install --with dev
+      - name: Pytest's tests run
+        run: |
+          pytest
