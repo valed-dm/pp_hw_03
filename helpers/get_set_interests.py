@@ -10,6 +10,7 @@ def get_interests(cid):
     """Returns list of client's preferences from imitated db storage"""
 
     res = store_get(f"i:{cid}")
+    # return else [""] imitates client exists and db OK
     return json.loads(res) if res else [""]
 
 

@@ -7,7 +7,7 @@ import unittest
 
 from handlers.method_handler import method_handler
 from helpers.codes import ADMIN_LOGIN, ADMIN_SALT, SALT, INVALID_REQUEST, FORBIDDEN, OK
-from helpers.get_set_interests import set_interests
+# from helpers.get_set_interests import set_interests
 
 
 def cases(test_data):
@@ -32,9 +32,9 @@ class TestSuite(unittest.TestCase):
         self.context = {}
         self.headers = {}
         self.settings = {}
-        # substitutes cid (client id): clients data table is not implemented
-        for mock_cid in range(1, 6):
-            set_interests(cid=mock_cid)
+        # # substitutes cid (client id): clients data table is not implemented
+        # for mock_cid in range(1, 6):
+        #     set_interests(cid=mock_cid)
 
     def get_response(self, request):
         """Handles testing API requests"""
