@@ -1,5 +1,5 @@
 """Score API redis storage"""
-
+import json
 import logging
 import time
 
@@ -67,4 +67,4 @@ def store_get(key):
         # returns info message if db is unavailable at a moment
         except redis.ConnectionError:
             logging.error("db connection lost")
-            return ["Unable to get client_interests: db connection lost"]
+            return json.dumps(["Unable to get client_interests: db connection lost"])
