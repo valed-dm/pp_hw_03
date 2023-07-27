@@ -17,10 +17,7 @@ def check_request_data(obj, ctx, **kwargs):
         return response, code, data
 
     except (KeyError, ValueError) as e:
-        response = {
-            "code": INVALID_REQUEST,
-            "error": getattr(e, 'message', repr(e))
-        }
+        response = {"code": INVALID_REQUEST, "error": getattr(e, "message", repr(e))}
         code = INVALID_REQUEST
 
         return response, code, data

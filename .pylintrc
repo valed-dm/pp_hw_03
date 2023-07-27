@@ -5,6 +5,7 @@ disable=
      R0913, # Too many arguments (7/5) (too-many-arguments)
      R0914, # Too many local variables (16/15) (too-many-locals)
      R0916, # Too many boolean expressions in if statement (6/5) (too-many-boolean-expressions)
+     W0401, #  Wildcard import fields (wildcard-import)
      W0613, # Unused argument 'store' (unused-argument)
      W0718, # Catching too general exception Exception (broad-exception-caught)
 

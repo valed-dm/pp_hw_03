@@ -11,17 +11,17 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 
 from handlers.method_handler import method_handler
 from helpers.codes import BAD_REQUEST, ERRORS, OK
+from helpers.get_set_interests import set_interests
 
 
 class MainHTTPHandler(BaseHTTPRequestHandler):
-    """Handles api POST requests"""
+    """Handles Score API POST requests"""
 
-    store = None
-
-    def get_request_id(self, headers):
+    @staticmethod
+    def get_request_id(headers):
         """Provides request id"""
 
-        return headers.get('HTTP_X_REQUEST_ID', uuid.uuid4().hex)
+        return headers.get("HTTP_X_REQUEST_ID", uuid.uuid4().hex)
 
     def do_POST(self):
         """Process api POST request"""
@@ -32,7 +32,7 @@ class MainHTTPHandler(BaseHTTPRequestHandler):
         data_string = ""
 
         try:
-            data_string = self.rfile.read(int(self.headers['Content-Length']))
+            data_string = self.rfile.read(int(self.headers["Content-Length"]))
             request = json.loads(data_string)
         except TimeoutError:
             code = BAD_REQUEST
@@ -41,9 +41,7 @@ class MainHTTPHandler(BaseHTTPRequestHandler):
             logging.info("%s: %s %s", self.path, data_string, context["request_id"])
 
             response, code = method_handler(
-                request=request,
-                headers=self.headers,
-                context=context
+                request=request, headers=self.headers, context=context
             )
 
         self.send_response(code)
@@ -57,16 +55,26 @@ class MainHTTPHandler(BaseHTTPRequestHandler):
 
         context.update(r)
         logging.info(context)
-        self.wfile.write(json.dumps(r).encode(encoding='utf-8'))
+        self.wfile.write(json.dumps(r).encode(encoding="utf-8"))
 
 
 if __name__ == "__main__":
+    # substitutes cid (client id): clients data table is not implemented
+    for mock_cid in range(1, 11):
+        set_interests(cid=mock_cid)
+
     parser = argparse.ArgumentParser(description="server port, log file setup")
     parser.add_argument("-p", "--port", action="store", type=int, default=8080)
     parser.add_argument("-l", "--log", action="store", default=None)
     args = parser.parse_args()
-    logging.basicConfig(filename=args.log, level=logging.INFO,
-                        format='[%(asctime)s] %(levelname).1s %(message)s', datefmt='%Y.%m.%d %H:%M:%S')
+
+    logging.basicConfig(
+        filename=args.log,
+        level=logging.INFO,
+        format="[%(asctime)s] %(levelname).1s %(message)s",
+        datefmt="%Y.%m.%d %H:%M:%S",
+    )
+
     server = HTTPServer(("localhost", args.port), MainHTTPHandler)
     logging.info("Starting server at %s", args.port)
     try:
