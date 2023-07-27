@@ -6,7 +6,7 @@ import uuid
 import pytest
 import redis
 
-from cache.store import cache_set, cache_get, store_get
+from cache.store import cache_set, cache_get, store_get, r_connect
 
 value_data = [
     ("sc:" + uuid.uuid4().hex, 60 * 60, 5.0, 5.0),
@@ -27,7 +27,7 @@ class TestStore:
         """Testing cache(cache_get), imitated db(store_get)"""
 
         try:
-            # check if redis connection is alve
+            # check if redis connection is alive
             r = redis.Redis()
 
             if r.ping():
@@ -47,3 +47,24 @@ class TestStore:
             assert json.loads(interests) == [
                 "Unable to get client_interests: db connection lost"
             ]
+
+
+class TestRedisConnect:
+    """Tests redis connection attempts"""
+
+    count = 0
+
+    def counter(self):
+        """Counts redis connection attempts qty"""
+        self.count += 1
+
+    def test_redis_connect(self):
+        """Redis connection max_retries qty attempts testing"""
+
+        try:
+            r_connect(self.counter)
+        except redis.ConnectionError:
+            # max_retries = 5
+            assert self.count == 5
+
+        assert self.count == 1
