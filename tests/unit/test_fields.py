@@ -2,7 +2,7 @@
 
 import pytest
 
-from fields import *
+from tests.fields import *
 from models.request_fields import (
     Field,
     CharField,
