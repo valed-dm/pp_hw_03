@@ -33,18 +33,17 @@ def online_score_handler(request, ctx):
                 email=email,
                 phone=phone,
                 birthday=birthday,
-                gender=gender
+                gender=gender,
             )
 
             if code != INVALID_REQUEST:
                 score = get_score(
-                    store=None,
                     phone=data.phone.field,
                     email=data.email.field,
                     birthday=data.birthday.field,
                     gender=data.gender.field,
                     first_name=data.first_name.field,
-                    last_name=data.last_name.field
+                    last_name=data.last_name.field,
                 )
                 response = {"score": score}
 
@@ -53,10 +52,10 @@ def online_score_handler(request, ctx):
             response = {
                 "code": code,
                 "error": "args must contain albeit one non-empty values pair: "
-                         "phone/email, "
-                         "first/last name, "
-                         "gender/birthday, "
-                         f"but got {arguments}"
+                "phone/email, "
+                "first/last name, "
+                "gender/birthday, "
+                f"but got {arguments}",
             }
     else:
         response = {"score": 42}

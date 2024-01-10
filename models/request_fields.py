@@ -13,7 +13,7 @@ class Field:
     @staticmethod
     def _is_valid(field, field_name, required, nullable):
         if required and field is None:
-            raise KeyError(f"request {repr(field_name)} field is required but not found")
+            raise KeyError(f"request {repr(field_name)} field is required")
         if not field:
             if nullable:
                 pass
@@ -45,9 +45,9 @@ class ArgumentsField(Field):
 
     @field.setter
     def field(self, field):
-        if field:
+        if field is not None:
             if not isinstance(field, dict):
-                raise ValueError("arguments must be of dict type")
+                raise ValueError(f"ArgumentsField must be of 'dict' type, not {field}")
         self._field = field
 
 
@@ -61,8 +61,8 @@ class EmailField(Field):
 
     @field.setter
     def field(self, field):
-        if field:
-            if not isinstance(field, str) or '@' not in field and field:
+        if field is not None:
+            if not isinstance(field, str) or "@" not in field:
                 raise ValueError(f"email must contain '@', {field} is not valid")
         self._field = field
 
@@ -77,16 +77,20 @@ class PhoneField(Field):
 
     @field.setter
     def field(self, field):
-        if field:
-            phone = str(field)
-            if len(phone) not in [0, 11]:
-                raise ValueError(
-                    f"phone should contain 11 digits with leading '7' or left empty, not {phone}"
-                )
-            if not phone.startswith("7") and len(phone) != 0:
-                raise ValueError(
-                    f"phone should contain 11 digits with leading '7' or left empty, not {phone}"
-                )
+        if field is not None:
+            if isinstance(field, (str, int)):
+                phone = str(field)
+                if len(phone) not in [0, 11]:
+                    raise ValueError(
+                        f"phone should contain 11 digits with leading '7' or left empty, not {phone}"
+                    )
+                if not phone.startswith("7") and len(phone) != 0:
+                    raise ValueError(
+                        f"phone should contain 11 digits with leading '7' or left empty, not {phone}"
+                    )
+            else:
+                raise ValueError(f"phone should be of str or int type, not {field}")
+
         self._field = field
 
 
@@ -101,11 +105,14 @@ class DateField(Field):
     @field.setter
     def field(self, field):
         date_format = "%d.%m.%Y"
-        if field:
-            try:
-                datetime.datetime.strptime(field, date_format)
-            except ValueError as e:
-                raise ValueError(f"date format 'DD.MM.YYYY' or empty: {field} is not valid") from e
+        if field is not None:
+            if field != "":
+                try:
+                    datetime.datetime.strptime(field, date_format)
+                except (ValueError, TypeError) as e:
+                    raise ValueError(
+                        f"date format 'DD.MM.YYYY' or empty: {repr(field)} is not valid"
+                    ) from e
         self._field = field
 
 
@@ -120,16 +127,21 @@ class BirthDayField(Field):
     @field.setter
     def field(self, field):
         date_format = "%d.%m.%Y"
-        if field:
-            try:
-                b_date_time = datetime.datetime.strptime(field, date_format)
-            except ValueError as e:
-                raise ValueError(f"date format 'DD.MM.YYYY' or empty: {field} is not valid") from e
+        if field is not None:
+            if field != "":
+                try:
+                    b_date_time = datetime.datetime.strptime(field, date_format)
+                except (ValueError, TypeError) as e:
+                    raise ValueError(
+                        f"birthday format 'DD.MM.YYYY' or empty: {field} is not valid"
+                    ) from e
 
-            now_time = datetime.datetime.now()
-            t_delta_years = now_time.year - b_date_time.year
-            if t_delta_years >= 70:
-                raise ValueError(f"person age should not exceed 70, but given {t_delta_years}")
+                now_time = datetime.datetime.now()
+                t_delta_years = now_time.year - b_date_time.year
+                if t_delta_years >= 70:
+                    raise ValueError(
+                        f"person age should not exceed 70, but given {t_delta_years}"
+                    )
         self._field = field
 
 
@@ -144,8 +156,10 @@ class GenderField(Field):
     @field.setter
     def field(self, field):
         if field is not None:
-            if not isinstance(field, int) and field not in [0, 1, 2] or field < 0:
-                raise ValueError(f"gender value should be integer of 0, 1, 2 or left empty, not {repr(field)}")
+            if not isinstance(field, int) or field not in [0, 1, 2] or field < 0:
+                raise ValueError(
+                    f"gender is pos integer of 0, 1, 2 or left empty, not {repr(field)}"
+                )
         self._field = field
 
 
@@ -160,7 +174,11 @@ class ClientIDsField(Field):
     @field.setter
     def field(self, field):
         if not isinstance(field, list) or len(field) == 0:
-            raise ValueError(f"client_ids should be of non-empty list type, not {repr(field)}")
+            raise ValueError(
+                f"client_ids should be of non-empty list type, not {repr(field)}"
+            )
         if not all(isinstance(item, int) for item in field):
-            raise ValueError(f"all client_ids values are to be integers, not {repr(field)}")
+            raise ValueError(
+                f"all client_ids values are to be integers, not {repr(field)}"
+            )
         self._field = field

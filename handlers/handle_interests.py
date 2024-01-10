@@ -2,7 +2,7 @@
 
 from check.check_request_data import check_request_data
 from helpers.codes import INVALID_REQUEST
-from helpers.get_interests import get_interests
+from helpers.get_set_interests import get_interests
 from models.request_interests import ClientsInterestsRequest
 
 
@@ -21,7 +21,7 @@ def clients_interests_handler(request, ctx):
         ctx["nclients"] = len(client_ids)
 
         for cid in client_ids:
-            interests = get_interests(store=None, cid=cid)
+            interests = get_interests(cid=cid)
             response[f"{cid}"] = interests
 
     return response, code
