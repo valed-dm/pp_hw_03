@@ -79,7 +79,7 @@ birthday_data = [
     ((), "birthday format 'DD.MM.YYYY' or empty: () is not valid"),
     ("20-12-2022", "birthday format 'DD.MM.YYYY' or empty: 20-12-2022 is not valid"),
     ("20.12.1979", "20.12.1979"),
-    ("20.12.1939", "person age should not exceed 70, but given 84"),
+    ("20.12.1939", "person age should not exceed 70, but given 85"),
     ("", ""),
 ]
 
